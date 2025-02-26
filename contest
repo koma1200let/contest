@@ -4,7 +4,7 @@ print('для добавление введите new') #вариант дейс
 print('для получении о событии нажмите search') #вариант действия
 wish=input('Выберете действие: ') #поле для ввода желаемого действия
 actions={'10-11-2000':'день','12-11-2000':'ночь'} #словарь для событий
-patrisipants={} #словарь для участников
+patrisipants={'ночь':['я','ты'],'день':['мы','вы']} #словарь для участников
 def find_events_in_range(start_date, end_date):
     result = []
     for event_date, event_name in actions.items():
@@ -18,7 +18,7 @@ if wish=='new':
     people_list=people.split(',') #разделяем с помощью split
     actions[f'{date}']=event #заносим данные в словарь
     patrisipants[f'{date}']=people_list #заносим данные в словарь
-    print('Событие добавлено') #успешное добовление
+    print('Событие добавлено') #успешное добавление
 elif wish=='search':
     print('для поиска по дате введите date')
     print('для поиска по названию введите name')
@@ -27,4 +27,9 @@ elif wish=='search':
         start_date = input('введите первую дату диапозона ')
         end_date = input('введите вторую дату диапозона ')
         result = find_events_in_range(start_date, end_date)
-print(f"События с {start_date} по {end_date}: {', '.join(result)}")
+        print(f"События с {start_date} по {end_date}: {', '.join(result)}")
+    elif wish_search=='name':
+        name=input('Введите имя участника: ')
+        for event, participants in patrisipants.items():
+            if name in participants:
+                print(f"Событие: {event}")
