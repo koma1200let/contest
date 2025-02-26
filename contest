@@ -1,7 +1,10 @@
 import datetime
+from collections import Counter
 
 print('для добавление введите new') #вариант действия
 print('для получении о событии нажмите search') #вариант действия
+print('для получения статистики введите stats') #вариант действия
+print('для получения справки введите help') #вариант действия
 wish=input('Выберете действие: ') #поле для ввода желаемого действия
 actions={'10-11-2000':'день','12-11-2000':'ночь'} #словарь для событий
 patrisipants={'ночь':['я','ты'],'день':['мы','вы']} #словарь для участников
@@ -33,3 +36,16 @@ elif wish=='search':
         for event, participants in patrisipants.items():
             if name in participants:
                 print(f"Событие: {event}")
+elif wish=='stats':
+    all_participants = []
+    for participants in patrisipants.values():
+        all_participants.extend(participants)
+    if all_participants:
+        participant_counter = Counter(all_participants)
+        most_common_participant, most_common_count = participant_counter.most_common(1)[0]
+        print(f"Самый упоминаемый участник: {most_common_participant} (упоминаний: {most_common_count})")
+    else:
+        print("Участники не найдены.")
+print(f"Количество событий: {len(actions)}")
+if wish=='help':
+    print('чтобы пользоватся надо при выборе действия вводит его англискими буквами, а при добавлении информации-русскими и следовать инструкциям')
