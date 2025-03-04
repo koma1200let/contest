@@ -1,51 +1,70 @@
 import datetime
 from collections import Counter
 
-print('для добавление введите new') #вариант действия
-print('для получении о событии нажмите search') #вариант действия
-print('для получения статистики введите stats') #вариант действия
-print('для получения справки введите help') #вариант действия
-wish=input('Выберете действие: ') #поле для ввода желаемого действия
-actions={'10-11-2000':'день','12-11-2000':'ночь'} #словарь для событий
-patrisipants={'ночь':['я','ты'],'день':['мы','вы']} #словарь для участников
+# Функция для поиска событий в диапазоне дат
 def find_events_in_range(start_date, end_date):
     result = []
     for event_date, event_name in actions.items():
         if start_date <= event_date <= end_date:
             result.append(event_name)
     return result
-if wish=='new':
-    event=input("Введите событие ") #спрашиваем событие
-    date=input("Введите дату события(пример: 01-01-2000) ") #спрашиваем дату
-    people=input("Введите участников события через запятую (пример: Фамилия И.О., Фамилия И.О.): ") #спрашиваем участников
-    people_list=people.split(',') #разделяем с помощью split
-    actions[f'{date}']=event #заносим данные в словарь
-    patrisipants[f'{date}']=people_list #заносим данные в словарь
-    print('Событие добавлено') #успешное добавление
-elif wish=='search':
-    print('для поиска по дате введите date')
-    print('для поиска по названию введите name')
-    wish_search=input('Выберете действие: ')
-    if wish_search=='date':
-        start_date = input('введите первую дату диапозона ')
-        end_date = input('введите вторую дату диапозона ')
-        result = find_events_in_range(start_date, end_date)
-        print(f"События с {start_date} по {end_date}: {', '.join(result)}")
-    elif wish_search=='name':
-        name=input('Введите имя участника: ')
-        for event, participants in patrisipants.items():
-            if name in participants:
-                print(f"Событие: {event}")
-elif wish=='stats':
-    all_participants = []
-    for participants in patrisipants.values():
-        all_participants.extend(participants)
-    if all_participants:
-        participant_counter = Counter(all_participants)
-        most_common_participant, most_common_count = participant_counter.most_common(1)[0]
-        print(f"Самый упоминаемый участник: {most_common_participant} (упоминаний: {most_common_count})")
+
+# Инициализация словарей для событий и участников
+actions = {}
+patrisipants = {}
+
+# Основной цикл программы
+while True:
+    print('\n--- Меню ---')
+    print('для добавления введите new')  # вариант действия
+    print('для получения о событии нажмите search')  # вариант действия
+    print('для получения статистики введите stats')  # вариант действия
+    print('для получения справки введите help')  # вариант действия
+    print('для выхода введите exit')  # вариант действия
+    wish = input('Выберите действие: ')  # поле для ввода желаемого действия
+
+    if wish == 'new':
+        event = input("Введите событие: ")  # спрашиваем событие
+        date = input("Введите дату события (пример: 01-01-2000): ")  # спрашиваем дату
+        people = input("Введите участников события через запятую (пример: Фамилия И.О., Фамилия И.О.): ")  # спрашиваем участников
+        people_list = people.split(',')  # разделяем с помощью split
+        actions[date] = event  # заносим данные в словарь
+        patrisipants[event] = people_list  # заносим данные в словарь
+        print('Событие добавлено')  # успешное добавление
+
+    elif wish == 'search':
+        print('для поиска по дате введите date')
+        print('для поиска по названию введите name')
+        wish_search = input('Выберите действие: ')
+        if wish_search == 'date':
+            start_date = input('Введите первую дату диапазона: ')
+            end_date = input('Введите вторую дату диапазона: ')
+            result = find_events_in_range(start_date, end_date)
+            print(f"События с {start_date} по {end_date}: {', '.join(result)}")
+        elif wish_search == 'name':
+            name = input('Введите имя участника: ')
+            for event, participants in patrisipants.items():
+                if name in participants:
+                    print(f"Событие: {event}")
+
+    elif wish == 'stats':
+        all_participants = []
+        for participants in patrisipants.values():
+            all_participants.extend(participants)
+        if all_participants:
+            participant_counter = Counter(all_participants)
+            most_common_participant, most_common_count = participant_counter.most_common(1)[0]
+            print(f"Самый упоминаемый участник: {most_common_participant} (упоминаний: {most_common_count})")
+        else:
+            print("Участники не найдены.")
+        print(f"Количество событий: {len(actions)}")
+
+    elif wish == 'help':
+        print('Описание проекта: \n Данное приложение позволяет искать информацию о ключевых событиях Великой Отечественной войны (1941–1945). \n Пользователь может вводить название сражения, дату или ключевые слова, чтобы получить исторические сведения, даты и участников. \n Автор: Янец Роман Андреевич')
+
+    elif wish == 'exit':
+        print('Выход из программы.')
+        break  # завершаем цикл и выходим из программы
+
     else:
-        print("Участники не найдены.")
-print(f"Количество событий: {len(actions)}")
-if wish=='help':
-    print('чтобы пользоватся надо при выборе действия вводит его англискими буквами, а при добавлении информации-русскими и следовать инструкциям')
+        print('Неизвестное действие. Попробуйте снова.')
